@@ -6,7 +6,7 @@
 import azure.cognitiveservices.speech as speechsdk
 import threading
 import time
-# import keys
+import keys
 
 listen = True
 speech_recognizer = None
