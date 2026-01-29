@@ -1,1 +1,5 @@
-src/.env
+.env
+.python-version
+pyproject.toml
+uv.lock
+.gitignore
