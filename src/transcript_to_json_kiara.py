@@ -139,10 +139,10 @@ if __name__ == "__main__":
     if ASSISTANT_SPEAKER == "TRUMP":
         output_folder = "trump-responses"
 
-    input_file = f"{data_path}/raw-data/trump_biden_1.txt"
-    output_file = f"{data_path}/{output_folder}/trump_biden_1.jsonl"
-    transcript_to_jsonl(input_file, output_file)
+    # input_file = f"{data_path}/raw-data/trump_biden_1.txt"
+    # output_file = f"{data_path}/{output_folder}/trump_biden_1.jsonl"
+    # transcript_to_jsonl(input_file, output_file)
 
-    jsonl_file = f"{data_path}/{output_folder}/trump_biden_1.jsonl"
-    split_jsonl_dataset(jsonl_file, f"{data_path}/{output_folder}/training1.jsonl",
-                        f"{data_path}/{output_folder}/validation1.jsonl", train_ratio=0.8)
+    jsonl_file = f"{data_path}/{output_folder}/combined.jsonl"
+    split_jsonl_dataset(jsonl_file, f"{data_path}/{output_folder}/training.jsonl",
+                        f"{data_path}/{output_folder}/validation.jsonl", train_ratio=0.8)
