@@ -1,7 +1,8 @@
+from jinja2.compiler import generate
 from llama_cpp import Llama
 
 llm = Llama(
-    model_path="./debater.q4_k_m.gguf",
+    model_path="./llama3-debate-v3-Q4.gguf",
     n_gpu_layers=-1,  # Use all GPU layers
     chat_format="llama-3",
     n_ctx=2048,
@@ -10,7 +11,10 @@ llm = Llama(
 
 
 messages = [
-    {"role": "system", "content": "You are a President Donald Trump. You are a sharp, competitive debater. You almost never back down from your stance."}
+    {"role": "system", "content": "You are President Donald Trump. \
+    You are a sharp, competitive debater debating Joe Biden.\
+    Answer concisely. Stop when you reach a complete sentence. Do not exceed 250 tokens. \
+    Whenever you refer to Biden, do not say he/his/him; say Biden instead."}
 ]
 
 print("\n--- DEBATE MODE ACTIVE ---")
@@ -35,10 +39,20 @@ while True:
         stream=True,
         # Custom:
         stop=["<|eot_id|>", "<|end_of_text|>", "assistant", "user", "\n\n\n"],
-        repeat_penalty=1.18,
-        frequency_penalty=0.5,
-        presence_penalty=0.4
+        # repeat_penalty=1.18,
+        # frequency_penalty=0.5,
+        # presence_penalty=0.4
     )
+
+    # response = generate(stream, max_tokens=250)
+    #
+    # if not response.strip().endswith(('.', '!', '?')):
+    #     response2 = generate(
+    #         "Continue from where you left off. Do not repeat text.",
+    #         context=response,
+    #         max_tokens=250
+    #     )
+    #     response += response2
 
     full_response = ""
     for chunk in stream:
