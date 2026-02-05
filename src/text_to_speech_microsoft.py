@@ -13,6 +13,7 @@ speech_to_text_microsoft.listen = True
 speech_engine = None
 things_to_say = []
 stop_speech_synthesis = False
+is_speaking = False  # Flag to indicate when TTS is actively speaking
 
 
 def set_up():
@@ -34,12 +35,13 @@ def say(thing_to_say):
 
 
 def speech_synthesis_thread_function(name):
-    global speech_to_text_microsoft, listen, stop_speech_synthesis, things_to_say
+    global speech_to_text_microsoft, listen, stop_speech_synthesis, things_to_say, is_speaking
     while not stop_speech_synthesis:
         if len(things_to_say) > 0:
             thing_to_say = things_to_say[0]
             things_to_say = things_to_say[1:]
             speech_to_text_microsoft.listen = False
+            is_speaking = True
             result = speech_synthesizer.speak_text_async(thing_to_say).get()
             if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
                 pass
@@ -53,6 +55,7 @@ def speech_synthesis_thread_function(name):
                         print("Error details: {}".format(
                             cancellation_details.error_details))
                     print("Did you update the subscription info?")
+            is_speaking = False
             speech_to_text_microsoft.listen = True
         else:
             time.sleep(0.1)
