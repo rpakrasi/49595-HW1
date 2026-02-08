@@ -8,11 +8,17 @@ from llama_cpp.server.types import ChatCompletionRequestMessage
 
 def test_model():
     llm = Llama(
-        model_path="./llama3-debate-v3-Q4.gguf",
+        # Works but it is super slow
+        # model_path="/Users/kiarachau/Desktop/llama3-debate.gguf",
+        # n_gpu_layers=20,
+        # Faster but worse quality
+        model_path="/Users/kiarachau/Desktop/llama3-debate-q4.gguf",
         n_gpu_layers=-1,
         chat_format="llama-3",
         n_ctx=2048,
-        verbose=False
+        flash_attn=True,  # This is a huge memory saver on Macs
+        n_threads=8,
+        verbose=True
     )
 
     SYSTEM_PROMPT = (
@@ -52,7 +58,7 @@ def test_model():
 
         stream = llm.create_chat_completion(
             messages=messages,
-            max_tokens=300,
+            max_tokens=250,
             stream=True,
             stop=["<|eot_id|>", "<|end_of_text|>", "}"],
             # --- Persona Tuning ---
@@ -60,7 +66,6 @@ def test_model():
             min_p=0.05,  # Better diversity than top_p
             top_p=1.0,  # Disabled in favor of min_p
             top_k=0,  # Disabled in favor of min_p
-
             repeat_penalty=1.1,  # Allow some natural repetition
             presence_penalty=0.2,  # Encourage moving to new topics
         )
