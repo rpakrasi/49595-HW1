@@ -39,8 +39,9 @@ def speech_recognition_thread_function(name):
                     speech_config = speechsdk.SpeechConfig(
                         subscription=keys.azure_key,
                         region=keys.azure_region)
-                    audio_config = speechsdk.audio.AudioConfig(
-                        device_name="pipewire")
+                    # audio_config = speechsdk.audio.AudioConfig(
+                    #     device_name="pipewire")
+                    audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True) # Above version was for Linux, this is for mac
                     speech_recognizer = speechsdk.SpeechRecognizer(
                         speech_config=speech_config, audio_config=audio_config)
                     speech_recognizer.recognized.connect(handle_final_result)
