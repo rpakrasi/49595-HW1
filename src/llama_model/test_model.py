@@ -6,7 +6,7 @@ from llama_cpp import Llama, ChatCompletionRequestSystemMessage, ChatCompletionR
 from llama_cpp.server.types import ChatCompletionRequestMessage
 
 
-def test_model(forgets_past_prompts: bool = False):
+def test_model():
     llm = Llama(
         model_path="./llama3-debate-v3-Q4.gguf",
         n_gpu_layers=-1,
@@ -38,8 +38,6 @@ def test_model(forgets_past_prompts: bool = False):
     messages: List[ChatCompletionRequestMessage] = [system_msg]
 
     while True:
-        if forgets_past_prompts:
-            messages = [system_msg]
 
         user_input = input("YOU: ")
 
@@ -69,8 +67,8 @@ def test_model(forgets_past_prompts: bool = False):
 
         full_response = ""
         chunk_count = 0
-        junk_patterns = ["ujících", "userCpp", "Method", "Initialized", "drFc", "user", "assistant", "taşıy_AdjustorThunk"]
-
+        junk_patterns = ["ujících", "userCpp", "Method", "Initialized", "drFc", "user", "assistant",
+                         "taşıy_AdjustorThunk"]
 
         for chunk in stream:
             delta = chunk["choices"][0]["delta"]
@@ -98,4 +96,4 @@ def test_model(forgets_past_prompts: bool = False):
 
 
 if __name__ == "__main__":
-    test_model(forgets_past_prompts=False)
+    test_model()

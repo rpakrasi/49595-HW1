@@ -4,7 +4,7 @@ pyproject.toml
 uv.lock
 .gitignore
 /.idea/49595-HW1.iml
-/src/llama-model/debater.q4_k_m.gguf
+/src/llama_model/debater.q4_k_m.gguf
 /.idea/misc.xml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/inspectionProfiles/Project_Default.xml

@@ -16,13 +16,11 @@ login(token=TOKEN)
 
 model_id = "meta-llama/Meta-Llama-3-8B"
 
-# 1. Cluster Optimization: 4-bit Quantization (QLoRA)
-# This allows the 8B model to fit into ~5.5GB of VRAM
+# 1. Cluster Optimization: 8-bit Quantization
 bnb_config = BitsAndBytesConfig(
-    load_in_4bit=True,
-    bnb_4bit_quant_type="nf4",
-    bnb_4bit_compute_dtype=torch.bfloat16,  # Use BF16 for fast math on NVIDIA
-    bnb_4bit_use_double_quant=True,
+    load_in_8bit=True,
+    llm_int8_threshold=6.0,  # Default, good for LLaMA
+    llm_int8_has_fp16_weight=False
 )
 
 # 2. Load Model on GPU
@@ -68,7 +66,7 @@ llama3_chat_template = (
 tokenizer.chat_template = llama3_chat_template
 
 # 5. Dataset Loading & Prep
-dataset = load_dataset("json", data_files={"train": "combined.jsonl"}, split="train")
+dataset = load_dataset("json", data_files={"train": "trump.jsonl"}, split="train")
 
 
 def format_chat_template(row):
