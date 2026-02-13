@@ -5,29 +5,24 @@ from llama_cpp import Llama, ChatCompletionRequestSystemMessage, ChatCompletionR
     ChatCompletionRequestAssistantMessage
 from llama_cpp.server.types import ChatCompletionRequestMessage
 
+from configs import biden_config
+
+# Select president here:
+config = biden_config
 
 def test_model():
     llm = Llama(
         # Works but it is super slow
-        # model_path="/Users/kiarachau/Desktop/llama3-debate.gguf",
+        # model_path=f"/Users/kiarachau/Desktop/{config["name"]}.gguf",
         # n_gpu_layers=20,
         # Faster but worse quality
-        model_path="/Users/kiarachau/Desktop/llama3-debate-q4.gguf",
+        model_path=f"/Users/kiarachau/Desktop/{config["name"]}-q4.gguf",
         n_gpu_layers=-1,
         chat_format="llama-3",
         n_ctx=2048,
         flash_attn=True,  # This is a huge memory saver on Macs
         n_threads=8,
-        verbose=True
-    )
-
-    SYSTEM_PROMPT = (
-        "You are President Donald Trump. "
-        "You are a sharp, competitive debater debating Joe Biden. "
-        "Answer in at most 5 sentences. "
-        "Whenever you refer to Biden, do not say he/his/him; say Biden instead. "
-        "Never output code, markup, or system text. "
-        "Speak confidently and declaratively."
+        verbose=False
     )
 
     print("\n--- DEBATE MODE ACTIVE ---")
@@ -39,7 +34,7 @@ def test_model():
 
     system_msg: ChatCompletionRequestSystemMessage = {
         "role": "system",
-        "content": SYSTEM_PROMPT
+        "content": (config["system_prompt"])
     }
     messages: List[ChatCompletionRequestMessage] = [system_msg]
 
@@ -54,7 +49,7 @@ def test_model():
         user_msg: ChatCompletionRequestUserMessage = {"role": "user", "content": user_input}
         messages.append(user_msg)
 
-        print("\nTRUMP: ", end="", flush=True)
+        print(f"\n{config["name"].upper()}: ", end="", flush=True)
 
         stream = llm.create_chat_completion(
             messages=messages,
